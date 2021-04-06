@@ -3,8 +3,9 @@ var Stacks = require('../models/stacks')
 
 var router = express.Router();
 
-router.get('/', (req, res) => {
-    Stacks.retrieveAll((err, stack) => {
+router.get('/:userid', (req, res) => {
+    var userid = req.params.userid;
+    Stacks.retrieveAll(userid, (err, stack) => {
         if (err) {
             return res.json(err)
         }

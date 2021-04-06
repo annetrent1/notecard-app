@@ -1,8 +1,8 @@
 const db = require('../database')
 
 class Stacks {
-    static retrieveAll (callback) {
-        db.query('SELECT name FROM stack;', (err, res) => {
+    static retrieveAll (userid, callback) {
+        db.query('SELECT name, stackid FROM stack WHERE userid=$1;', [userid], (err, res) => {
             if (err.error) {
                 return callback(err)
             }

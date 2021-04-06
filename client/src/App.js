@@ -18,7 +18,9 @@ class App extends Component {
     super(props);
   
   this.state = {
-    userid: "1",
+    email: "anne@anne.com",
+    password: "pass",
+    userid: "",
     stackid: "1",
     stackList: [],
     newStackName: "",
@@ -26,11 +28,23 @@ class App extends Component {
   }
 }
 
+getUser = () => {
+  fetch(`/api/user/${this.state.email}/${this.state.password}`,)
+  .then(res => res.json())
+  .then(res => {
+    var userid = res.map(r=> r.userid);
+    this.setState({userid});
+    this.getStacks();
+  })
+}
+
 getStacks = () => {
-  fetch('/api/stacks')
+  fetch(`/api/stacks/${this.state.userid}`)
   .then(res => res.json())
   .then(res => {
     var stackList = res.map(r=> r.name);
+    var userid = res.map(r=> r.userid);
+    this.setState({userid});
     this.setState({stackList});
   })
 }
@@ -49,7 +63,7 @@ handleInputChange = (e) => {
 }
 
 // handleChangeStack = (e) => {
-//   this.getStacks({newStackName: e.target.value});
+//   this.getNotecards({stackid: e.target.value});
 // }
 
 handleAddStack = () => {
@@ -72,6 +86,7 @@ handleAddStack = () => {
 }
 
 componentDidMount() {
+  this.getUser();
   this.getStacks();
   this.getNotecards();
 }

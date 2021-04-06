@@ -2,8 +2,6 @@ const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const cors = require('cors')
-
 var db = require('./database')
 
 const ENV = process.env.NODE_ENV
@@ -17,6 +15,7 @@ app.use(bodyParser.json())
 
 app.use('/api/stacks', require('./api/stacks'))
 app.use('/api/notecards', require('./api/notecards'))
+app.use('/api/user', require('./api/user'))
 
 if (ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
