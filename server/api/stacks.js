@@ -3,8 +3,8 @@ var Stacks = require('../models/stacks')
 
 var router = express.Router();
 
-router.get('/', function (req, res) {
-    Stacks.retrieveAll(function (err, stack) {
+router.get('/', (req, res) => {
+    Stacks.retrieveAll((err, stack) => {
         if (err) {
             return res.json(err)
         }
@@ -12,10 +12,10 @@ router.get('/', function (req, res) {
     })
 })
 
-router.post('/', function (req, res) {
-    var stack = req.body.stack;
+router.post('/', (req, res) => {
     var userid = req.body.userid;
-    Stacks.insert(stacks, userid, function (err, result) {
+    var stack = req.body.stack;
+    Stacks.insert(userid, stack, (err, result) => {
         if (err) {
             return res.json(err)
         }
