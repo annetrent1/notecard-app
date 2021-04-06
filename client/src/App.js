@@ -39,7 +39,7 @@ getNotecards = () => {
   fetch(`/api/notecards/`+ this.state.stackid,)
   .then(res => res.json())
   .then(res => {
-    var notecardList = res.map(r=> ({descriptionfront: r.descriptionfront, descriptionback: r.descriptionback}));
+    var notecardList = res.map(r=> ({'descriptionfront': r.descriptionfront, 'descriptionback': r.descriptionback}));
     this.setState({notecardList});
   })
 }
@@ -100,7 +100,7 @@ render() {
           </InputGroupAddon>
        </InputGroup>
        </Navbar>
-       <Notecard></Notecard>
+      { this.state.notecardList.map((r) => <Notecard data={r} />) }
      </Container>
     )
   }

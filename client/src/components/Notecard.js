@@ -10,7 +10,7 @@ const Notecard = (props) => {
   return (
       <Card body inverse color="info">
         <CardTitle tag="h5">{data.descriptionfront}</CardTitle>
-        <CardText>{data.descriptionfront}</CardText>
+        <CardText>{data.descriptionback}</CardText>
         <Button color="secondary">Edit</Button>
       </Card>
   );
