@@ -17,7 +17,12 @@ app.use(bodyParser.json())
 
 app.use('/api/stacks', require('./api/stacks'))
 
-
+if (ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  });
+}
 // Choose the port and start the server
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}!`)

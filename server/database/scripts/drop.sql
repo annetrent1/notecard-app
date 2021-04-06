@@ -1,0 +1,1 @@
+DROP TABLE public.notecard, public.stack, public.user;
