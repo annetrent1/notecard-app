@@ -21,7 +21,7 @@ class App extends Component {
     email: "anne@anne.com",
     password: "pass",
     userid: "",
-    stackid: "1",
+    stackid: "",
     stackList: [],
     newStackName: "",
     notecardList: []
@@ -42,15 +42,14 @@ getStacks = () => {
   fetch(`/api/stacks/${this.state.userid}`)
   .then(res => res.json())
   .then(res => {
-    var stackList = res.map(r=> r.name);
-    var userid = res.map(r=> r.userid);
-    this.setState({userid});
+    var stackList = res.map(r=> ({'name': r.name, 'stackid': r.stackid}));
     this.setState({stackList});
   })
 }
 
 getNotecards = () => {
-  fetch(`/api/notecards/`+ this.state.stackid,)
+  console.log("STACKID", this.state.stackid);
+  fetch(`/api/notecards/${this.state.stackid}`,)
   .then(res => res.json())
   .then(res => {
     var notecardList = res.map(r=> ({'descriptionfront': r.descriptionfront, 'descriptionback': r.descriptionback}));
@@ -62,9 +61,13 @@ handleInputChange = (e) => {
   this.setState({newStackName: e.target.value});
 }
 
-// handleChangeStack = (e) => {
-//   this.getNotecards({stackid: e.target.value});
-// }
+handleChangeStack = (e) => {
+  console.log("EVENT", e.target.value);
+  var stackid = e.target.value;
+  this.setState({stackid: stackid}, () => {
+    this.getNotecards();
+  });
+}
 
 handleAddStack = () => {
   fetch('/api/stacks', {
@@ -87,8 +90,6 @@ handleAddStack = () => {
 
 componentDidMount() {
   this.getUser();
-  this.getStacks();
-  this.getNotecards();
 }
 
 render() {
@@ -97,11 +98,11 @@ render() {
        <Navbar dark color="dark">
          <NavbarBrand href='/'>notecards</NavbarBrand>
          <FormGroup>
-              {/* <Input type="select" onChange={this.handleChangeStack}> */}
-              <Input type="select">
+              <Input type="select" onChange={this.handleChangeStack}>
+              {/* <Input type="select"> */}
                 { this.state.stackList.length === 0 && <option>No stacks yet.</option> }
                 { this.state.stackList.length > 0 && <option>Select a stack.</option> }
-                { this.state.stackList.map((name, i) => <option key={i}>{name}</option>) }
+                { this.state.stackList.map((r) => <option key={r.stackid} value={r.stackid}>{r.name}</option>) }
               </Input>
             </FormGroup>
          <InputGroup>
