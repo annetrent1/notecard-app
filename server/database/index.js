@@ -8,8 +8,8 @@ class Database {
   constructor () {
     this._pool = new Pool({
       connectionString: CONNECTION_STRING,
-      // ssl: { rejectUnauthorized: false }
-      ssl: SSL
+      ssl: { rejectUnauthorized: false }
+      // ssl: SSL
     });
 
     this._pool.on('error', (err, client) => {

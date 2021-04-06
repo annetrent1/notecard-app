@@ -4,7 +4,7 @@ var Notecards = require('../models/notecards')
 var router = express.Router();
 
 router.get('/:stackid', (req, res) => {
-    var stackid = req.body.userid;
+    var stackid = req.params.stackid;
     Notecards.retrieveByStack(stackid, (err, notecard) => {
         if (err) {
             return res.json(err)

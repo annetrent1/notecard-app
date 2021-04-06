@@ -36,16 +36,7 @@ getStacks = () => {
 }
 
 getNotecards = () => {
-  fetch('/api/notecards', {
-    method: 'get',
-    headers: { 
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      stackid: this.state.stackid,
-    })
-  })
+  fetch(`/api/notecards/`+ this.state.stackid,)
   .then(res => res.json())
   .then(res => {
     var notecardList = res.map(r=> ({descriptionfront: r.descriptionfront, descriptionback: r.descriptionback}));

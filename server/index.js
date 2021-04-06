@@ -16,6 +16,7 @@ app.use(express.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 app.use('/api/stacks', require('./api/stacks'))
+app.use('/api/notecards', require('./api/notecards'))
 
 if (ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
