@@ -9,7 +9,11 @@ import {
   InputGroup,
   InputGroupAddon,
   Button,
-  FormGroup
+  FormGroup,
+  Card,
+  CardTitle,
+  CardText,
+  Form
 } from 'reactstrap';
 import Notecard from './components/Notecard';
 
@@ -24,7 +28,9 @@ class App extends Component {
     stackid: "",
     stackList: [],
     newStackName: "",
-    notecardList: []
+    notecardList: [],
+    newNotecardFront: "",
+    newNotecardBack: ""
   }
 }
 
@@ -33,7 +39,7 @@ getUser = () => {
   .then(res => res.json())
   .then(res => {
     var userid = res.map(r=> r.userid);
-    this.setState({userid});
+    this.setState({userid: userid[0]});
     this.getStacks();
   })
 }
@@ -48,7 +54,6 @@ getStacks = () => {
 }
 
 getNotecards = () => {
-  console.log("STACKID", this.state.stackid);
   fetch(`/api/notecards/${this.state.stackid}`,)
   .then(res => res.json())
   .then(res => {
@@ -57,12 +62,19 @@ getNotecards = () => {
   })
 }
 
-handleInputChange = (e) => {
+handleInputStackChange = (e) => {
   this.setState({newStackName: e.target.value});
 }
 
+handleNoteFrontInputChange = (e) => {
+  this.setState({newNotecardFront: e.target.value});
+}
+
+handleNoteBackInputChange = (e) => {
+  this.setState({newNotecardBack: e.target.value});
+}
+
 handleChangeStack = (e) => {
-  console.log("EVENT", e.target.value);
   var stackid = e.target.value;
   this.setState({stackid: stackid}, () => {
     this.getNotecards();
@@ -88,6 +100,35 @@ handleAddStack = () => {
   })
 }
 
+handleAddNotecard = () => {
+  var descriptionfront = this.state.newNotecardFront
+  var descriptionback = this.state.newNotecardBack
+  var stackid = this.state.stackid
+
+  console.log(`Front: ${descriptionfront}, Back: ${descriptionback}, ID: ${stackid}`)
+
+  if (descriptionfront !== "" && descriptionback !== "" && stackid !=="") {
+    fetch('/api/notecards', {
+      method: 'post',
+      headers: { 
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        stackid: this.state.stackid,
+        descriptionfront: this.state.newNotecardFront,
+        descriptionback: this.state.newNotecardBack
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.getNotecards();
+      this.setState({newNotecardFront: ''});
+      this.setState({newNotecardBack: ''});
+    })
+  }
+}
+
 componentDidMount() {
   this.getUser();
 }
@@ -109,7 +150,7 @@ render() {
           <Input 
             placeholder="New Stack Name"
             value={this.state.newStackName}
-            onChange={this.handleInputChange}
+            onChange={this.handleInputStackChange}
           />
           <InputGroupAddon addonType="append">
             <Button color="primary" onClick={this.handleAddStack}>Add Stack</Button>
@@ -117,6 +158,25 @@ render() {
        </InputGroup>
        </Navbar>
       { this.state.notecardList.map((r) => <Notecard data={r} />) }
+      <Card body inverse color="info">
+        <Form>
+          <CardTitle tag="h5">
+            <Input 
+              placeholder="New NoteCard Title"
+              value={this.state.newNotecardFront}
+              onChange={this.handleNoteFrontInputChange}
+            />
+          </CardTitle>
+          <CardText>
+            <Input 
+              placeholder="New NoteCard Body"
+              value={this.state.newNotecardBack}
+              onChange={this.handleNoteBackInputChange}
+            />
+          </CardText>
+          <Button color="secondary" onClick={this.handleAddNotecard}>Add</Button>
+        </Form>
+      </Card>
      </Container>
     )
   }

@@ -2,7 +2,7 @@ const db = require('../database')
 
 class Notecards {
     static retrieveByStack (stackid, callback) {
-        db.query('SELECT descriptionfront, descriptionback FROM notecard WHERE stackid=$1;', [stackid], (err, res) => {
+        db.query('SELECT descriptionfront, descriptionback, notecardid FROM notecard WHERE stackid=$1;', [stackid], (err, res) => {
             if (err.error) {
                 return callback(err)
             }

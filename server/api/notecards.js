@@ -14,7 +14,7 @@ router.get('/:stackid', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    var stackid = req.body.userid;
+    var stackid = req.body.stackid;
     var descriptionfront = req.body.descriptionfront;
     var descriptionback = req.body.descriptionback;
     Notecards.insert(stackid, descriptionfront, descriptionback, (err, result) => {
