@@ -19,6 +19,16 @@ class Notecards {
             callback(res)
         })
     }
+
+    static edit (notecardid, descriptionfront, descriptionback, callback) {
+        db.query('UPDATE notecard SET descriptionfront=$1, descriptionback=$2 WHERE notecardid=$3;', 
+            [descriptionfront, descriptionback, notecardid], function (err, res) {
+            if (err.error) {
+                return callback(err)
+            }
+            callback(res)
+        })
+    }
 }
 
 module.exports = Notecards;

@@ -77,28 +77,30 @@ handleNoteBackInputChange = (e) => {
 
 handleChangeStack = (e) => {
   var stackid = e.target.value;
-  this.setState({stackid: stackid}, () => {
+  this.setState({stackid: e.target.value}, () => {
     this.getNotecards();
   });
 }
 
 handleAddStack = () => {
-  fetch('/api/stacks', {
-    method: 'post',
-    headers: { 
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      userid: this.state.userid,
-      stack: this.state.newStackName
+  if (this.state.newStackName !== "" && this.state.userid !== "") {
+    fetch('/api/stacks', {
+      method: 'post',
+      headers: { 
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userid: this.state.userid,
+        stack: this.state.newStackName
+      })
     })
-  })
-  .then(res => res.json())
-  .then(res => {
-    this.getStacks();
-    this.setState({newStackName: ''});
-  })
+    .then(res => res.json())
+    .then(res => {
+      this.getStacks();
+      this.setState({newStackName: ''});
+    })
+  }
 }
 
 handleAddNotecard = () => {
@@ -134,17 +136,17 @@ componentDidMount() {
 
 render() {
     return (
-     <Container fluid className="centered">
-       <Navbar dark color="dark">
+     <Container fluid>
+       <Navbar dark className="barcontainer" color="dark">
          <NavbarBrand href='/'>notecards</NavbarBrand>
-         <FormGroup>
+         <FormGroup className="input-container">
               <Input type="select" onChange={this.handleChangeStack}>
                 { this.state.stackList.length === 0 && <option>No stacks yet.</option> }
                 { this.state.stackList.length > 0 && <option>Select a stack.</option> }
-                { this.state.stackList.map((r) => <option key={r.stackid} value={r.stackid}>{r.name}</option>) }
+                { this.state.stackList.map((r) => <option key={r.stackid} value={r.stackid}>{r.name}{r.stackid}</option>) }
               </Input>
-            </FormGroup>
-         <InputGroup>
+          </FormGroup>
+         <InputGroup className="stack-input">
           <Input 
             placeholder="New Stack Name"
             value={this.state.newStackName}
@@ -155,26 +157,28 @@ render() {
           </InputGroupAddon>
        </InputGroup>
        </Navbar>
-      { this.state.notecardList.map((r) => <Notecard data={r} />) }
-      <Card body inverse color="info">
-        <Form>
-          <CardTitle tag="h5">
-            <Input 
-              placeholder="New NoteCard Title"
-              value={this.state.newNotecardFront}
-              onChange={this.handleNoteFrontInputChange}
-            />
-          </CardTitle>
-          <CardText>
-            <Input 
-              placeholder="New NoteCard Body"
-              value={this.state.newNotecardBack}
-              onChange={this.handleNoteBackInputChange}
-            />
-          </CardText>
-          <Button color="secondary" onClick={this.handleAddNotecard}>Add</Button>
-        </Form>
-      </Card>
+       <div className="card-container">
+        { this.state.notecardList.map((r) => <Notecard className="card" data={r} key={r.notecardid}/> ) }
+        <Card body inverse color="info" className="card">
+          <Form>
+            <CardTitle tag="h5">
+              <Input 
+                placeholder="New Notecard Title"
+                value={this.state.newNotecardFront}
+                onChange={this.handleNoteFrontInputChange}
+              />
+            </CardTitle>
+            <CardText>
+              <Input 
+                placeholder="New Notecard Body"
+                value={this.state.newNotecardBack}
+                onChange={this.handleNoteBackInputChange}
+              />
+            </CardText>
+            <Button color="secondary" onClick={this.handleAddNotecard}>Add</Button>
+          </Form>
+        </Card>
+      </div>
      </Container>
     )
   }

@@ -25,4 +25,17 @@ router.post('/', (req, res) => {
     })
 })
 
+router.post('/edit', (req, res) => {
+    var notecardid = req.body.notecardid;
+    var descriptionfront = req.body.descriptionfront;
+    var descriptionback = req.body.descriptionback;
+
+    Notecards.edit(notecardid, descriptionfront, descriptionback, (err, result) => {
+        if (err) {
+            return res.json(err)
+        }
+        return res.json(result)
+    })
+})
+
 module.exports = router;

@@ -1,6 +1,23 @@
 .App {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   margin: 2em;
+}
+.bar-container {
+  display: flex;
+}
+.stack-input{
+  max-width: 50%;
+}
+.input-container {
+  margin-top: 1rem;
+}
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.card {
+  width: 45%;
+  justify-content: space-between;
+  margin: 5px 5px 5px;
 }

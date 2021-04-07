@@ -15,6 +15,10 @@ class Notecard extends Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({descriptionfront: this.props.data.descriptionfront})
+  }
+
   showInputs =() => {
     this.setState(prevState => ({
       showInputs: !prevState.showInputs
@@ -27,6 +31,34 @@ class Notecard extends Component {
   
   handleNoteBackInputChange = (e) => {
     this.setState({newDescriptionback: e.target.value});
+  }
+
+  handleEditNotecard = () => {
+    var front = this.state.newNotecardFront
+    var back = this.state.newNotecardBack
+    var id = this.state.notecardid
+    if (front !== "" && back !== "" && id !=="") {
+      fetch('/api/notecards/edit', {
+        method: 'post',
+        headers: { 
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          notecardid: this.state.notecardid,
+          descriptionfront: this.state.newDescriptionfront,
+          descriptionback: this.state.newDescriptionback
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({descriptionfront: front});
+        this.setState({descriptionback: this.state.newNotecardBack}, () => {
+          this.showInputs();
+        });
+      })
+    }
+    // console.log("AFTER: ", this.state.descriptionback);
   }
 
   render() {
@@ -52,7 +84,8 @@ class Notecard extends Component {
                 onChange={this.handleNoteBackInputChange}
               />
             </CardText>
-            <Button onClick={this.showInputs}>Edit</Button>
+            <Button onClick={this.showInputs}>{this.state.showInputs ? `Edit` : `Cancel`}</Button>
+            <Button hidden={this.state.showInputs} onClick={this.handleEditNotecard}>Submit</Button>
           </Form>
         </Card>
     );
