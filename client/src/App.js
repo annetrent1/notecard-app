@@ -76,7 +76,6 @@ handleNoteBackInputChange = (e) => {
 }
 
 handleChangeStack = (e) => {
-  var stackid = e.target.value;
   this.setState({stackid: e.target.value}, () => {
     this.getNotecards();
   });
@@ -143,7 +142,7 @@ render() {
               <Input type="select" onChange={this.handleChangeStack}>
                 { this.state.stackList.length === 0 && <option>No stacks yet.</option> }
                 { this.state.stackList.length > 0 && <option>Select a stack.</option> }
-                { this.state.stackList.map((r) => <option key={r.stackid} value={r.stackid}>{r.name}{r.stackid}</option>) }
+                { this.state.stackList.map((r) => <option key={r.stackid} value={r.stackid}>{r.name}</option>) }
               </Input>
           </FormGroup>
          <InputGroup className="stack-input">
