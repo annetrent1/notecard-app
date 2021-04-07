@@ -30,7 +30,8 @@ class App extends Component {
     newStackName: "",
     notecardList: [],
     newNotecardFront: "",
-    newNotecardBack: ""
+    newNotecardBack: "",
+    notecardid: ""
   }
 }
 
@@ -57,7 +58,7 @@ getNotecards = () => {
   fetch(`/api/notecards/${this.state.stackid}`,)
   .then(res => res.json())
   .then(res => {
-    var notecardList = res.map(r=> ({'descriptionfront': r.descriptionfront, 'descriptionback': r.descriptionback}));
+    var notecardList = res.map(r=> ({'descriptionfront': r.descriptionfront, 'descriptionback': r.descriptionback, 'notecardid': r.notecardid}));
     this.setState({notecardList});
   })
 }
@@ -105,8 +106,6 @@ handleAddNotecard = () => {
   var descriptionback = this.state.newNotecardBack
   var stackid = this.state.stackid
 
-  console.log(`Front: ${descriptionfront}, Back: ${descriptionback}, ID: ${stackid}`)
-
   if (descriptionfront !== "" && descriptionback !== "" && stackid !=="") {
     fetch('/api/notecards', {
       method: 'post',
@@ -140,7 +139,6 @@ render() {
          <NavbarBrand href='/'>notecards</NavbarBrand>
          <FormGroup>
               <Input type="select" onChange={this.handleChangeStack}>
-              {/* <Input type="select"> */}
                 { this.state.stackList.length === 0 && <option>No stacks yet.</option> }
                 { this.state.stackList.length > 0 && <option>Select a stack.</option> }
                 { this.state.stackList.map((r) => <option key={r.stackid} value={r.stackid}>{r.name}</option>) }
