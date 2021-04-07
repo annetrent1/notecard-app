@@ -34,8 +34,8 @@ class Notecard extends Component {
   }
 
   handleEditNotecard = () => {
-    var front = this.state.newNotecardFront
-    var back = this.state.newNotecardBack
+    var front = this.state.newDescriptionfront
+    var back = this.state.newDescriptionback
     var id = this.state.notecardid
     if (front !== "" && back !== "" && id !=="") {
       fetch('/api/notecards/edit', {
@@ -50,15 +50,12 @@ class Notecard extends Component {
           descriptionback: this.state.newDescriptionback
         })
       })
-      .then(res => res.json())
       .then(res => {
-        this.setState({descriptionfront: front});
-        this.setState({descriptionback: this.state.newNotecardBack}, () => {
+        this.setState({descriptionfront: front, descriptionback: back}, () => {
           this.showInputs();
         });
       })
     }
-    // console.log("AFTER: ", this.state.descriptionback);
   }
 
   render() {
